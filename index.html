@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Investment Profit Calculator</title>
+  </head>
+  <body>
+    <h1>Investment Profit Calculator</h1>
+    <script>
+      (function () {
+        let initialAmount = 187;
+        let numberOfDays = 240;
+        let interestRate = 2.5;
+        let profit = initialAmount;
+
+        for (i = 1; i <= numberOfDays; i++) {
+          profit = (profit / 100) * (100 + interestRate);
+          console.log(`Day ${i}: ${profit.toFixed(0)}`);
+        }
+      })();
+    </script>
+  </body>
+</html>
