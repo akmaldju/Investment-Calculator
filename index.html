@@ -4,21 +4,63 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Investment Profit Calculator</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/css-freedom/dist/freedom.css"
+    />
   </head>
-  <body>
-    <h1>Investment Profit Calculator</h1>
+  <body class="p-0 m-0 h-screen">
+    <header class="bg-black t-left">
+      <h2 class="h3 t-forestgreen t-whitesmoke-hover p-3 m-0">
+        Investment Profit Calculator
+      </h2>
+    </header>
     <script>
-      (function () {
-        let initialAmount = 187;
-        let numberOfDays = 240;
-        let interestRate = 2.5;
+      function calculateProfit() {
+        let initialAmount =
+          parseFloat(document.getElementById("initialAmount")?.value) || 187;
+        let numberOfDays =
+          parseFloat(document.getElementById("numberOfDays")?.value) || 240;
+        let interestRate =
+          parseFloat(document.getElementById("interestRate")?.value) || 2.5;
         let profit = initialAmount;
 
+        console.log("Investment Profit Calculator");
         for (i = 1; i <= numberOfDays; i++) {
           profit = (profit / 100) * (100 + interestRate);
           console.log(`Day ${i}: ${profit.toFixed(0)}`);
         }
-      })();
+      }
     </script>
+    <form class="column w-content mx-auto p-6">
+      <div class="row jc-space-between my-4">
+        <label for="initialAmount" class="my-auto mr-4"
+          >Initial Investment:
+        </label>
+        <input
+          class="p-2"
+          type="text"
+          name="initialAmount"
+          id="initialAmount"
+        />
+      </div>
+      <div class="row jc-space-between my-4">
+        <label for="numberOfDays" class="my-auto mr-4">Number of days: </label>
+        <input class="p-2" type="text" name="numberOfDays" id="numberOfDays" />
+      </div>
+      <div class="row jc-space-between my-4">
+        <label for="interestRate" class="my-auto mr-4">Daily Interest: </label>
+        <input class="p-2" type="text" name="interestRate" id="interestRate" />
+      </div>
+      <div class="row w-full mt-8">
+        <button
+          class="btn bg-forestgreen t-whitesmoke hover-pop mx-auto"
+          onclick="calculateProfit()"
+        >
+          Calculate
+        </button>
+      </div>
+    </form>
   </body>
 </html>
