@@ -18,6 +18,7 @@
     </header>
     <script>
       function calculateProfit() {
+        const resultTable = document.getElementById("result");
         let initialAmount =
           parseFloat(document.getElementById("initialAmount")?.value) || 187;
         let numberOfDays =
@@ -26,10 +27,24 @@
           parseFloat(document.getElementById("interestRate")?.value) || 2.5;
         let profit = initialAmount;
 
+        resultTable.innerHTML = "";
         console.log("Investment Profit Calculator");
+
         for (i = 1; i <= numberOfDays; i++) {
+          const resultTableRow = document.createElement("tr");
+          const resultDay = document.createElement("td");
+
+          const resultProfit = document.createElement("td");
+
+          resultDay.appendChild(document.createTextNode(`Day ${i}`));
+          resultProfit.appendChild(document.createTextNode(profit.toFixed(0)));
+
+          resultTableRow.appendChild(resultDay);
+          resultTableRow.appendChild(resultProfit);
+
           profit = (profit / 100) * (100 + interestRate);
           console.log(`Day ${i}: ${profit.toFixed(0)}`);
+          result.appendChild(resultTableRow);
         }
       }
     </script>
@@ -61,6 +76,9 @@
           Calculate
         </button>
       </div>
+    </div>
+    <div class="column w-content mx-auto p-6">
+      <table class="table table-bordered table-responsive" id="result"></table>
     </div>
   </body>
 </html>
