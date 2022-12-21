@@ -3,17 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Return of Investment Calculator</title>
+    <title>ROI Calculator</title>
 
     <link
       rel="stylesheet"
       href="https://unpkg.com/css-freedom/dist/freedom.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+
+    <style>
+      /* Back to Top button styles */
+      #topButton {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        display: none;
+        z-index: 9999;
+      }
+    </style>
   </head>
   <body class="p-0 m-0 h-screen">
     <header class="bg-black t-left">
       <h2 class="h3 t-forestgreen t-whitesmoke-hover p-3 m-0">
-        Return of Investment Calculator
+        ROI Calculator
       </h2>
     </header>
     <script>
@@ -30,21 +47,69 @@
         resultTable.innerHTML = "";
         console.log("Investment Profit Calculator");
 
+        // Create table headers
+        const resultTableHeader = document.createElement("tr");
+        const resultDayHeader = document.createElement("th");
+        const resultProfitHeader = document.createElement("th");
+        const resultPercentageHeader = document.createElement("th");
+
+        resultDayHeader.appendChild(document.createTextNode("Day"));
+        resultProfitHeader.appendChild(document.createTextNode("PnL ($)"));
+        resultPercentageHeader.appendChild(document.createTextNode("PnL (%)"));
+
+        resultTableHeader.appendChild(resultDayHeader);
+        resultTableHeader.appendChild(resultProfitHeader);
+        resultTableHeader.appendChild(resultPercentageHeader);
+
+        result.appendChild(resultTableHeader);
+
         for (i = 1; i <= numberOfDays; i++) {
           const resultTableRow = document.createElement("tr");
           const resultDay = document.createElement("td");
 
           const resultProfit = document.createElement("td");
+          const resultPercentage = document.createElement("td");
+
+          resultDay.classList.add("bold");
+          resultDay.classList.add("t-center");
+          resultProfit.classList.add("t-center");
+          resultPercentage.classList.add("t-center");
 
           resultDay.appendChild(document.createTextNode(`Day ${i}`));
-          resultProfit.appendChild(document.createTextNode(profit.toFixed(0)));
+          resultProfit.appendChild(
+            document.createTextNode(`$${profit.toFixed(0)}`)
+          );
+          resultPercentage.appendChild(
+            document.createTextNode(
+              `${((profit / initialAmount - 1) * 100).toFixed(0)}%`
+            )
+          );
 
           resultTableRow.appendChild(resultDay);
           resultTableRow.appendChild(resultProfit);
+          resultTableRow.appendChild(resultPercentage);
 
           profit = (profit / 100) * (100 + interestRate);
           console.log(`Day ${i}: ${profit.toFixed(0)}`);
           result.appendChild(resultTableRow);
+        }
+      }
+
+      // Show/hide Back to Top button
+      window.onscroll = function () {
+        console.log("SCROLL");
+        scrollFunction();
+      };
+
+      function scrollFunction() {
+        if (
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+        ) {
+          console.log("display");
+          document.getElementById("topButton").style.display = "block";
+        } else {
+          document.getElementById("topButton").style.display = "none";
         }
       }
     </script>
@@ -53,20 +118,33 @@
         <label for="initialAmount" class="my-auto mr-4"
           >Initial Investment:
         </label>
+        <!-- Initial Investment input field -->
         <input
           class="p-2"
-          type="text"
+          type="number"
           name="initialAmount"
           id="initialAmount"
         />
       </div>
       <div class="row jc-space-between my-4">
         <label for="numberOfDays" class="my-auto mr-4">Number of days: </label>
-        <input class="p-2" type="text" name="numberOfDays" id="numberOfDays" />
+        <!-- Number of Days input field -->
+        <input
+          class="p-2"
+          type="number"
+          name="numberOfDays"
+          id="numberOfDays"
+        />
       </div>
       <div class="row jc-space-between my-4">
         <label for="interestRate" class="my-auto mr-4">Daily ROI: </label>
-        <input class="p-2" type="text" name="interestRate" id="interestRate" />
+        <!-- Daily ROI input field -->
+        <input
+          class="p-2"
+          type="number"
+          name="interestRate"
+          id="interestRate"
+        />
       </div>
       <div class="row w-full mt-8">
         <button
@@ -81,4 +159,19 @@
       <table class="table table-bordered table-responsive" id="result"></table>
     </div>
   </body>
+  <!-- Back to Top button -->
+  <button
+    id="topButton"
+    title="Go to top"
+    class="btn bg-forestgreen t-whitesmoke hover-pop"
+  >
+    <i class="fas fa-arrow-up"></i>
+  </button>
+  <script>
+    // Scroll to top when button is clicked
+    document.getElementById("topButton").addEventListener("click", function () {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    });
+  </script>
 </html>
