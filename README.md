@@ -32,6 +32,7 @@ To develop and run the investment calculator locally, you will need a web server
 
 ```
 git clone https://github.com/akmaldju/Investment-Calculator.git
+```
 
 2. Navigate to the project directory:
 
