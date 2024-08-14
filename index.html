@@ -42,6 +42,12 @@
           parseFloat(document.getElementById("numberOfDays")?.value) || 240;
         let interestRate =
           parseFloat(document.getElementById("interestRate")?.value) || 2.5;
+        let takingProfit =
+          parseFloat(document.getElementById("takingProfit")?.value) || 0;
+        let maxProfit =
+          parseFloat(document.getElementById("maxProfit")?.value) || Infinity;
+        let totalProfit = 0;
+
         let profit = initialAmount;
 
         resultTable.innerHTML = "";
@@ -52,28 +58,50 @@
         const resultDayHeader = document.createElement("th");
         const resultProfitHeader = document.createElement("th");
         const resultPercentageHeader = document.createElement("th");
+        const resultProfitTakenHeader = document.createElement("th");
 
         resultDayHeader.appendChild(document.createTextNode("Day"));
         resultProfitHeader.appendChild(document.createTextNode("PnL ($)"));
         resultPercentageHeader.appendChild(document.createTextNode("PnL (%)"));
+        resultProfitTakenHeader.appendChild(
+          document.createTextNode("Profit ($)")
+        );
 
         resultTableHeader.appendChild(resultDayHeader);
         resultTableHeader.appendChild(resultProfitHeader);
         resultTableHeader.appendChild(resultPercentageHeader);
+        resultTableHeader.appendChild(resultProfitTakenHeader);
 
         result.appendChild(resultTableHeader);
 
-        for (i = 1; i <= numberOfDays; i++) {
+        for (let i = 1; i <= numberOfDays; i++) {
           const resultTableRow = document.createElement("tr");
           const resultDay = document.createElement("td");
-
           const resultProfit = document.createElement("td");
           const resultPercentage = document.createElement("td");
+          const resultProfitTaken = document.createElement("td");
 
           resultDay.classList.add("bold");
           resultDay.classList.add("t-center");
           resultProfit.classList.add("t-center");
           resultPercentage.classList.add("t-center");
+          resultProfitTaken.classList.add("t-center");
+
+          // Calculate daily profit
+          let dailyProfit = (profit / 100) * interestRate;
+
+          // Apply taking profit and maximum profit per day
+          let profitToTake = (dailyProfit / 100) * takingProfit;
+          if (profitToTake > maxProfit) {
+            profitToTake = maxProfit;
+          }
+
+          // Reduce the profit by the amount taken
+          profit -= profitToTake;
+          totalProfit += profitToTake;
+
+          // Add the remaining profit back to the investment
+          profit += dailyProfit - profitToTake;
 
           resultDay.appendChild(document.createTextNode(`Day ${i}`));
           resultProfit.appendChild(
@@ -84,13 +112,20 @@
               `${((profit / initialAmount - 1) * 100).toFixed(0)}%`
             )
           );
+          resultProfitTaken.appendChild(
+            document.createTextNode(`$${totalProfit.toFixed(2)}`)
+          );
 
           resultTableRow.appendChild(resultDay);
           resultTableRow.appendChild(resultProfit);
           resultTableRow.appendChild(resultPercentage);
+          resultTableRow.appendChild(resultProfitTaken);
 
-          profit = (profit / 100) * (100 + interestRate);
-          console.log(`Day ${i}: ${profit.toFixed(0)}`);
+          console.log(
+            `Day ${i}: Profit = $${profit.toFixed(
+              0
+            )}, Profit = $${profitToTake.toFixed(0)}`
+          );
           result.appendChild(resultTableRow);
         }
       }
@@ -145,6 +180,25 @@
           name="interestRate"
           id="interestRate"
         />
+      </div>
+      <div class="row jc-space-between my-4">
+        <label for="takingProfit" class="my-auto mr-4"
+          >Taking Profit (%):
+        </label>
+        <!-- Taking Profit input field -->
+        <input
+          class="p-2"
+          type="number"
+          name="takingProfit"
+          id="takingProfit"
+        />
+      </div>
+      <div class="row jc-space-between my-4">
+        <label for="maxProfit" class="my-auto mr-4"
+          >Maximum Profit per Day ($):
+        </label>
+        <!-- Maximum Profit per Day input field -->
+        <input class="p-2" type="number" name="maxProfit" id="maxProfit" />
       </div>
       <div class="row w-full mt-8">
         <button
